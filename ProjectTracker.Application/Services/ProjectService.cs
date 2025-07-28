@@ -3,6 +3,7 @@ using ProjectTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +20,22 @@ public class ProjectService
 
     public Task<IEnumerable<Project>> GetAllProjectsAsync() => _projectRepository.GetAllAsync();
     public Task<Project?> GetProjectByIdAsync(int id) => _projectRepository.GetByIdAsync(id);
-    public Task<Project> CreateProjectAsync(Project project) => _projectRepository.AddAsync(project);
-    public Task UpdateProjectAsync(Project project) => _projectRepository.UpdateAsync(project);
+    public async Task<Project> CreateProjectAsync(Project project)
+    {
+        SanitizeProject(project);
+        return await _projectRepository.AddAsync(project);
+    }
+    public async Task UpdateProjectAsync(Project project)
+    {
+        SanitizeProject(project);
+        await _projectRepository.UpdateAsync(project);
+    }
     public Task DeleteProjectAsync(Project project) => _projectRepository.DeleteAsync(project);
+
+    private static void SanitizeProject(Project project)
+    {
+        project.Name = WebUtility.HtmlEncode(project.Name);
+        if (!string.IsNullOrEmpty(project.Description))
+            project.Description = WebUtility.HtmlEncode(project.Description);
+    }
 }

@@ -1,6 +1,6 @@
-feat(api): add ProjectsController with full CRUD and validation
+feat(api): add global exception handling, custom validation, and security hardening
 
-- Added ProjectDto and CreateUpdateProjectDto for input/output
-- Integrated AutoMapper for clean mapping
-- Implemented CRUD endpoints in ProjectsController
-- Ensured validation and proper HTTP response codes
+- Added centralized ExceptionMiddleware for error handling
+- Customized model validation error responses
+- Implemented tighter CORS policy for internal use
+- Basic input sanitization hooks for Project entity fields

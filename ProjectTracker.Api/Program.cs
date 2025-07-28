@@ -1,7 +1,9 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper.Configuration;  
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using ProjectTracker.Api.Middleware;
 using ProjectTracker.Application.Interfaces;
 using ProjectTracker.Application.Mapping;
 using ProjectTracker.Application.Services;
@@ -30,8 +32,8 @@ builder.Services.AddSwaggerGen(c =>
 // Basic CORS setup
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-        policy.AllowAnyOrigin()
+    options.AddPolicy("InternalPolicy", policy =>
+        policy.WithOrigins("https://localhost:4200")
               .AllowAnyHeader()
               .AllowAnyMethod());
 });
@@ -42,12 +44,25 @@ builder.Services.AddScoped<ProjectService>();
 
 builder.Services.AddAutoMapper(config => config.AddProfile<ProjectProfile>());
 
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .Where(e => e.Value?.Errors.Count > 0)
+            .Select(e => new { Field = e.Key, Error = e.Value!.Errors.First().ErrorMessage })
+            .ToList();
+
+        return new BadRequestObjectResult(new { Errors = errors });
+    };
+});
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-
-app.UseCors("AllowAll");
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors("InternalPolicy");
 
 //Swagger UI(dev only)
 if (app.Environment.IsDevelopment())
