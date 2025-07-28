@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProjectTracker.Application\ProjectTracker.Application.csproj" />
+    <ProjectReference Include="..\ProjectTracker.Infrastructure\ProjectTracker.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

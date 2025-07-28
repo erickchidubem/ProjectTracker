@@ -1,8 +1,12 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using ProjectTracker.Infrastructure.Data;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
+var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(dbConnectionString));
 
 builder.Services.AddControllers();
 
@@ -33,15 +37,14 @@ var app = builder.Build();
 app.UseCors("AllowAll");
 
 // Swagger UI (dev only)
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProjectTracker API v1");
-        c.RoutePrefix = string.Empty; // Swagger at root
     });
-}
+//}
 
 app.UseHttpsRedirection();
 
