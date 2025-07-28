@@ -1,6 +1,5 @@
-feat(api): add global exception handling, custom validation, and security hardening
+test: add xUnit tests for repositories and service layer
 
-- Added centralized ExceptionMiddleware for error handling
-- Customized model validation error responses
-- Implemented tighter CORS policy for internal use
-- Basic input sanitization hooks for Project entity fields
+- Added ProjectRepositoryTests with InMemory EF Core
+- Added ProjectServiceTests
+- Introduced test helpers for in-memory DbContext factory
