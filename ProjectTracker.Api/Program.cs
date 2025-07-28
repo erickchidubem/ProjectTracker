@@ -1,6 +1,9 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper.Configuration;  
 using Microsoft.OpenApi.Models;
 using ProjectTracker.Application.Interfaces;
+using ProjectTracker.Application.Mapping;
 using ProjectTracker.Application.Services;
 using ProjectTracker.Infrastructure.Data;
 using ProjectTracker.Infrastructure.Repositories;
@@ -36,6 +39,10 @@ builder.Services.AddCors(options =>
 // Dependency Injection for Application and Infrastructure layers
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ProjectService>();
+
+builder.Services.AddAutoMapper(config => config.AddProfile<ProjectProfile>());
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,6 +1,6 @@
-feat(repository+service): add repository pattern, project service, and EF Core migrations
+feat(api): add ProjectsController with full CRUD and validation
 
-- Implemented generic repository and project-specific repository
-- Created ProjectService in Application layer
-- Registered dependencies in API Program.cs
-- Added initial EF Core migration and updated database
+- Added ProjectDto and CreateUpdateProjectDto for input/output
+- Integrated AutoMapper for clean mapping
+- Implemented CRUD endpoints in ProjectsController
+- Ensured validation and proper HTTP response codes
