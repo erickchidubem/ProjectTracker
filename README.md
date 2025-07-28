@@ -34,7 +34,7 @@ ProjectTracker is a lightweight internal project tracking tool built with **ASP.
 
 ### **1\. Clone Repository**
 ```bash
-clone https://github.com/your-org/ProjectTracker.git
+git clone https://github.com/erickchidubem/ProjectTracker.git
 ```
 ```bash
   cd ProjectTracker
