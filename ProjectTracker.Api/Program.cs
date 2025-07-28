@@ -9,12 +9,14 @@ using ProjectTracker.Application.Mapping;
 using ProjectTracker.Application.Services;
 using ProjectTracker.Infrastructure.Data;
 using ProjectTracker.Infrastructure.Repositories;
+using Serilog;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(dbConnectionString));
+
 
 builder.Services.AddControllers();
 

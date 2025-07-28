@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectTracker.Application.DTOs;
 using ProjectTracker.Application.Services;
 using ProjectTracker.Domain.Entities;
+using ProjectTracker.Domain.Enums;
 
 namespace ProjectTracker.Api.Controllers;
 
@@ -69,4 +70,27 @@ public class ProjectsController : ControllerBase
         await _projectService.DeleteProjectAsync(existing);
         return NoContent();
     }
+
+    [HttpGet("paged")]
+    public async Task<ActionResult<object>> GetPagedProjects([FromQuery] PaginationQuery query)
+    {
+        var (items, totalCount) = await _projectService.GetProjectsPagedAsync(query.PageNumber, query.PageSize);
+        var data = _mapper.Map<IEnumerable<ProjectDto>>(items);
+
+        return Ok(new
+        {
+            TotalCount = totalCount,
+            PageNumber = query.PageNumber,
+            PageSize = query.PageSize,
+            Data = data
+        });
+    }
+
+    [HttpGet("filter")]
+    public async Task<ActionResult<IEnumerable<ProjectDto>>> GetByStatus([FromQuery] ProjectStatus status)
+    {
+        var projects = await _projectService.GetProjectsByStatusAsync(status);
+        return Ok(_mapper.Map<IEnumerable<ProjectDto>>(projects));
+    }
+
 }

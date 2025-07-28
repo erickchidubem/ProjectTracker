@@ -1,5 +1,6 @@
 ﻿using ProjectTracker.Application.Interfaces;
 using ProjectTracker.Domain.Entities;
+using ProjectTracker.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,4 +39,15 @@ public class ProjectService
         if (!string.IsNullOrEmpty(project.Description))
             project.Description = WebUtility.HtmlEncode(project.Description);
     }
+
+    public async Task<(IEnumerable<Project> Items, int TotalCount)> GetProjectsPagedAsync(int pageNumber, int pageSize)
+    {
+        return await _projectRepository.GetPagedAsync(pageNumber, pageSize);
+    }
+
+    public Task<IEnumerable<Project>> GetProjectsByStatusAsync(ProjectStatus status)
+    {
+        return _projectRepository.GetByStatusAsync(status);
+    }
+
 }

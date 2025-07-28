@@ -1,5 +1,7 @@
-test: add xUnit tests for repositories and service layer
+fix(api): resolve Swagger GET conflict by separating paged and all-project endpoints
 
-- Added ProjectRepositoryTests with InMemory EF Core
-- Added ProjectServiceTests
-- Introduced test helpers for in-memory DbContext factory
+- Updated ProjectsController to use distinct routes:
+  - GET /api/projects -> returns all projects
+  - GET /api/projects/paged -> returns paged projects with query params
+- Ensured Swagger no longer reports duplicate GET paths
+- Improved endpoint clarity and API usability
