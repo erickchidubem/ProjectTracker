@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using ProjectTracker.Application.Interfaces;
+using ProjectTracker.Application.Services;
 using ProjectTracker.Infrastructure.Data;
+using ProjectTracker.Infrastructure.Repositories;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,21 +33,24 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
+// Dependency Injection for Application and Infrastructure layers
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<ProjectService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
 app.UseCors("AllowAll");
 
-// Swagger UI (dev only)
-//if (app.Environment.IsDevelopment())
-//{
+//Swagger UI(dev only)
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProjectTracker API v1");
     });
-//}
+}
 
 app.UseHttpsRedirection();
 
